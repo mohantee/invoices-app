@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 export function Navigation() {
   return (
-    <nav className="h-[4.5rem] bg-neutral-4 sticky top-0 lg:h-screen lg:flex-col flex items-center gap-12 lg:gap-6 lg:rounded-r-[20px] overflow-hidden">
+    <nav className="z-10 h-[4.5rem] bg-neutral-4 sticky top-0 lg:h-screen lg:flex-col flex items-center gap-12 lg:gap-6 lg:rounded-r-[20px] overflow-hidden">
       <img
         src={logo}
         alt="logo"
