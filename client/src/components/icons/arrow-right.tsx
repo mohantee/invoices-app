@@ -8,7 +8,7 @@ export function ArrowRight() {
       fill="none"
       className="hidden md:block col-start-6"
     >
-      <path d="M1 1L5 5L1 9" stroke="#7C5DFA" stroke-width="2" />
+      <path d="M1 1L5 5L1 9" stroke="#7C5DFA" strokeWidth="2" />
     </svg>
   );
 }

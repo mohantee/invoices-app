@@ -5,14 +5,14 @@ import { Outlet } from "react-router-dom";
 
 export function Navigation() {
   return (
-    <nav className="z-10 h-[4.5rem] bg-neutral-4 sticky top-0 lg:h-screen lg:flex-col flex items-center gap-12 lg:gap-6 lg:rounded-r-[20px] overflow-hidden">
+    <nav className="sticky top-0 z-20 flex h-[4.5rem] items-center gap-12 overflow-hidden bg-neutral-4 lg:h-screen lg:flex-col lg:gap-6 lg:rounded-r-[20px]">
       <img
         src={logo}
         alt="logo"
-        className="max-h-[4.5rem] absolute top-0 left-0"
+        className="absolute left-0 top-0 max-h-[4.5rem]"
       />
-      <DarkModeIcon className="text-red-600 ml-auto lg:ml-0 lg:mt-auto cursor-pointer" />
-      <div className="p-6 border-l-2 border-solid border-[#494E6E] lg:p-4 lg:border-l-0 lg:border-t-2">
+      <DarkModeIcon className="ml-auto cursor-pointer text-red-600 lg:ml-0 lg:mt-auto" />
+      <div className="border-l-2 border-solid border-[#494E6E] p-6 lg:border-l-0 lg:border-t-2 lg:p-4">
         <img src={avatar} className="w-10 rounded-full" />
       </div>
     </nav>
@@ -21,12 +21,11 @@ export function Navigation() {
 
 export function AppLayout() {
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-neutral-11">
+    <div className="flex min-h-screen flex-col bg-neutral-11 lg:flex-row">
       <Navigation />
-      {/*Main Container*/}
-      <div className="max-w-[48rem] p-6 lg:p-8 w-full md:mx-auto">
+      <main className="w-full max-w-[48rem] p-6 md:mx-auto lg:p-8">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 }

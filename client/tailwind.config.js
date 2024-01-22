@@ -5,6 +5,10 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        "3xl": "0px 10px 10px -10px rgba(72, 84, 159, 0.10)",
+        "4xl": "0px 10px 10px -5px rgba(72, 84, 159, 0.10)",
+      },
       fontFamily: {
         sans: ['"League Spartan"', ...defaultTheme.fontFamily.sans],
       },

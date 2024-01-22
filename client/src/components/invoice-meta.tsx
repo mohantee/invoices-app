@@ -1,18 +1,12 @@
 import { cn } from "@/utils/cn";
 import { ArrowRight } from "./icons";
+import { InvoiceMeta } from "@/types";
+import { useNavigate } from "react-router-dom";
 
-type Invoice = {
-  id: string;
-  due: string;
-  receiver: string;
-  amount: string;
-  status: "Paid" | "Pending" | "Draft";
-};
-
-type Props = { invoices: Invoice[] };
+type Props = { invoices: InvoiceMeta[] };
 
 type InvoiceStatusProps = {
-  className: string;
+  className?: string;
   status: "Paid" | "Pending" | "Draft";
 };
 
@@ -22,7 +16,7 @@ export function InvoiceStatus(props: InvoiceStatusProps) {
   return (
     <div
       className={cn(
-        "h-10 w-[6.5rem] relative",
+        "relative h-10 w-[6.5rem]",
         status === "Paid" && "text-[#33D69F]",
         status === "Pending" && "text-[#FF8F00] ",
         status === "Draft" && "text-[#373B53] ",
@@ -31,7 +25,7 @@ export function InvoiceStatus(props: InvoiceStatusProps) {
     >
       <div
         className={cn(
-          "w-full h-full opacity-10 absolute rounded-lg",
+          "absolute h-full w-full rounded-lg opacity-10",
           status === "Paid" && "bg-[#33D69F] ",
           status === "Pending" && "bg-[#FF8F00] ",
           status === "Draft" && "bg-[#373B53] ",
@@ -39,7 +33,7 @@ export function InvoiceStatus(props: InvoiceStatusProps) {
       ></div>
       <div
         className={cn(
-          "flex items-center relative top-1 text-center",
+          "relative top-1 flex items-center text-center",
           status === "Paid" && "left-[1.875rem]",
           status === "Pending" && "left-5",
           status === "Draft" && "left-7",
@@ -54,30 +48,32 @@ export function InvoiceStatus(props: InvoiceStatusProps) {
 
 //TODO: Make the card accessible
 export function InvoiceMeta(props: Props) {
-  const invoiceList = props.invoices.map((invoice) => (
+  const navigate = useNavigate();
+  const invoice = props.invoices.map((invoice) => (
     <div
       key={invoice.id}
-      className="shadow-md p-6 grid grid-cols-2 grid-rows-4 md:grid-rows-1 md:grid-cols-5 md:justify-items-start md:items-center md:gap-x-10"
+      className="hover:shadow-4xl grid cursor-pointer grid-cols-2 grid-rows-4 rounded-md bg-white p-6 shadow-3xl transition-all sm:grid-cols-5 sm:grid-rows-1 sm:items-center sm:justify-items-start sm:gap-x-10"
+      onClick={() => navigate(`invoices/${invoice.id}`)}
     >
-      <h3 className="text-md text-neutral-8 row-start-1 md:col-span-1">
+      <h3 className="text-md row-start-1 text-neutral-8 sm:col-span-1">
         <span className="text-neutral-7">#</span>
         {invoice.id}
       </h3>
-      <p className="text-sm font-normal text-neutral-6 row-start-3 md:row-start-1 md:col-start-2">
-        {invoice.due}
+      <p className="row-start-3 text-sm font-medium text-neutral-6 sm:col-start-2 sm:row-start-1">
+        {invoice.dueDate}
       </p>
-      <p className="row-start-4 md:row-start-1 md:col-start-4 md:justify-self-end">
-        {invoice.amount}
+      <p className="row-start-4 sm:col-start-4 sm:row-start-1 sm:justify-self-end">
+        {invoice.amountDue}
       </p>
-      <p className="text-sm text-neutral-6 font-normal col-start-2 justify-self-end md:justify-self-start row-start-1 md:col-start-3">
-        {invoice.receiver}
+      <p className="col-start-2 row-start-1 justify-self-end text-sm font-medium text-neutral-6 sm:col-start-3 sm:justify-self-start">
+        {invoice.clientName}
       </p>
       <InvoiceStatus
         status={invoice.status}
-        className="col-start-2 row-start-3 row-end-5 justify-self-end md:row-start-1 md:col-start-5 scale-90"
+        className="col-start-2 row-start-3 row-end-5 justify-self-end sm:col-start-5 sm:row-start-1"
       />
       <ArrowRight />
     </div>
   ));
-  return invoiceList;
+  return invoice;
 }

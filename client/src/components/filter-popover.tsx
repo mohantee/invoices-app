@@ -16,7 +16,7 @@ export function FilterPopover() {
       <PopoverContent className="w-48 font-bold">
         <div className="flex flex-col gap-4">
           {filterItems.map((item) => (
-            <div className="flex items-end space-x-2">
+            <div key={item} className="flex items-end space-x-2">
               <Checkbox id={item} />
               <label
                 htmlFor={item}
