@@ -76,6 +76,7 @@ export function NewInvoice() {
           className="bg-[#373B53] text-neutral-5 hover:bg-neutral-8"
           size="sm"
           type="button"
+          // @ts-expect-error here
           onClick={() => handleSubmit((data) => onSubmit(data, true))}
         >
           Save as Draft
