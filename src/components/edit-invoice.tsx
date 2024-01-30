@@ -6,6 +6,8 @@ import { Form } from ".";
 import { useParams } from "react-router-dom";
 import { useInvoices } from "@/store/invoices";
 import { useInvoiceId } from "@/hooks/use-invoice-id";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { invoiceSchema } from "@/schema/invoice-schema";
 
 type Params = { id: string };
 
@@ -22,11 +24,14 @@ export function EditInvoice() {
     handleSubmit,
   } = useForm<InvoiceFormValues>({
     defaultValues: oldInvoice,
+    resolver: zodResolver(invoiceSchema),
   });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "itemList",
   });
+
+  console.log(errors);
 
   const onSubmit: SubmitHandler<InvoiceFormValues> = (data) => {
     const newInvoice = {
@@ -35,6 +40,7 @@ export function EditInvoice() {
       dueDate: oldInvoice?.dueDate,
       amountDue: oldInvoice?.amountDue,
       status: oldInvoice?.status,
+      invoiceDate: oldInvoice?.invoiceDate,
     };
     // @ts-expect-error here
     edit(newInvoice, id);

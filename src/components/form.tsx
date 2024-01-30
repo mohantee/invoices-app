@@ -53,6 +53,7 @@ const paymentTermsItems = [
 ];
 
 export function Form({
+  edit,
   handleSubmit,
   fields,
   append,
@@ -262,34 +263,37 @@ export function Form({
           <Controller
             name="invoiceDate"
             control={control}
-            render={({ field }) => (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className="justify-start rounded border border-neutral-5 px-5 shadow-none"
-                  >
-                    {field.value ? (
-                      format(field.value, "PPP")
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="shadow-5xl w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    hideHead={true}
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            )}
+            render={({ field }) => {
+              return (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className="justify-start rounded border border-neutral-5 px-5 shadow-none"
+                      disabled={edit}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 shadow-5xl">
+                    <Calendar
+                      mode="single"
+                      hideHead={true}
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              );
+            }}
           />
         </div>
 

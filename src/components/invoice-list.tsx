@@ -11,7 +11,7 @@ export function InvoiceList() {
         if (
           (filter.pending && invoice.status === "Pending") ||
           (filter.paid && invoice.status === "Paid") ||
-          (filter.draft && invoice.status === "draft")
+          (filter.draft && invoice.status === "Draft")
         )
           return <InvoiceMeta key={invoice.id} invoice={invoice} />;
       })}

@@ -7,32 +7,9 @@ import { Form } from ".";
 import { useInvoices } from "@/store/invoices";
 import { add } from "date-fns";
 import { genInvoiceId } from "@/utils/generate-id";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateTotalAmount } from "@/utils/calculate-total-amount";
-
-const schema = z.object({
-  senderStreetAddress: z.string().min(1, { message: "can't be empty" }),
-  senderCity: z.string().min(1, { message: "can't be empty" }),
-  senderPostCode: z.string().min(1, { message: "can't be empty" }),
-  senderCountry: z.string().min(1, { message: "can't be empty" }),
-  clientName: z.string().min(1, { message: "can't be empty" }),
-  clientStreetAddress: z.string().min(1, { message: "can't be empty" }),
-  clientCity: z.string().min(1, { message: "can't be empty" }),
-  clientPostCode: z.string().min(1, { message: "can't be empty" }),
-  clientCountry: z.string().min(1, { message: "can't be empty" }),
-  clientEmail: z.string().min(1, { message: "can't be empty" }),
-  invoiceDate: z.date(),
-  paymentTerms: z.string().min(1, { message: "can't be empty" }),
-  projectDescription: z.string().min(1, { message: "can't be empty" }),
-  itemList: z.array(
-    z.object({
-      name: z.string().min(1, { message: "can't be empty" }),
-      quantity: z.string().min(1, { message: "can't be empty" }),
-      price: z.string().min(1, { message: "can't be empty" }),
-    }),
-  ),
-});
+import { invoiceSchema } from "@/schema/invoice-schema";
 
 export function NewInvoice() {
   const {
@@ -48,7 +25,7 @@ export function NewInvoice() {
       paymentTerms: "Next 30 days",
       itemList: [{ name: "", price: "1", quantity: "1" }],
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(invoiceSchema),
   });
   const { fields, append, remove } = useFieldArray({
     control,
@@ -77,7 +54,7 @@ export function NewInvoice() {
           size="sm"
           type="button"
           // @ts-expect-error here
-          onClick={() => handleSubmit((data) => onSubmit(data, true))}
+          onClick={handleSubmit((data) => onSubmit(data, true))}
         >
           Save as Draft
         </Button>
@@ -93,12 +70,11 @@ export function NewInvoice() {
     const dueDate = add(data.invoiceDate, { days: daysToAdd });
     const id = genInvoiceId();
     const { itemList, amountDue } = calculateTotalAmount(data.itemList);
-
     createInvoice({
       ...data,
       dueDate,
       id,
-      status: draft ? "Draft" : "Pending",
+      status: typeof draft === "object" ? "Pending" : "Draft",
       amountDue,
       itemList,
     });
@@ -118,16 +94,16 @@ export function NewInvoice() {
         <Dialog.Overlay className="fixed inset-0 h-full w-full bg-black/15" />
         <Dialog.Content className="fixed left-0 top-[72px] h-screen w-full overflow-y-auto bg-white p-6 pb-24 sm:w-[38rem] lg:left-14 lg:top-0 lg:px-14 lg:py-8 lg:pl-[72px]">
           <Form
-            append={append}
             fields={fields}
+            append={append}
             remove={remove}
             register={register}
             handleSubmit={handleSubmit}
-            actions={actions}
             control={control}
             watch={watch}
             onSubmit={onSubmit}
             errors={errors}
+            actions={actions}
           />
         </Dialog.Content>
       </Dialog.Portal>

@@ -53,7 +53,7 @@ export function InvoiceMeta({ invoice }: Props) {
   return (
     <div
       key={invoice.id}
-      className="hover:shadow-4xl grid cursor-pointer grid-cols-2 grid-rows-4 rounded-md bg-white p-6 shadow-3xl transition-all sm:grid-cols-5 sm:grid-rows-1 sm:items-center sm:justify-items-start sm:gap-x-10"
+      className="grid cursor-pointer grid-cols-2 grid-rows-4 rounded-md bg-white p-6 shadow-3xl transition-all hover:shadow-4xl sm:grid-cols-5 sm:grid-rows-1 sm:items-center sm:justify-items-start sm:gap-x-10"
       onClick={() => {
         navigate(`invoices/${invoice.id}`);
       }}
