@@ -1,15 +1,21 @@
 import { Button } from "@/components/ui";
 import { useNavigate, useParams } from "react-router-dom";
 import backIcon from "@/assets/chevron-back.svg";
-import { useInvoice } from "@/api/get-invoice";
 import { InvoiceStatus } from "@/components/invoice-meta";
+import { EditInvoice } from "@/components";
+import { format } from "date-fns";
+import { useInvoices } from "@/store/invoices";
+import { useInvoiceId } from "@/hooks/use-invoice-id";
+import { DeleteInvoice } from "@/components/delete-invoice";
 
 type InvoiceParams = { id: string };
 
 export function InvoiceDetails() {
   const { id } = useParams<keyof InvoiceParams>() as InvoiceParams;
   const navigate = useNavigate();
-  const { data: invoice } = useInvoice(id);
+  const invoice = useInvoiceId(id);
+  const updateStatus = useInvoices((state) => state.updateStatus);
+
   return (
     <>
       <div className="mb-8 flex items-center">
@@ -30,12 +36,24 @@ export function InvoiceDetails() {
               <p className="text-neutral-6">Status</p>
               <InvoiceStatus status={invoice.status} />
             </div>
-            <div className="fixed bottom-0 left-0 z-10 flex w-full justify-between gap-2 bg-white p-6 sm:static sm:p-0">
-              <Button variant="ghost" className="text-neutral-7">
-                Edit
-              </Button>
-              <Button variant="destructive">Delete</Button>
-              <Button>Mark as Paid</Button>
+            <div className="fixed bottom-0 left-0 z-[2] flex w-full justify-between gap-2 bg-white p-6 sm:static sm:p-0">
+              <EditInvoice />
+              <DeleteInvoice id={id} />
+              {invoice.status === "Paid" ? (
+                <Button onClick={() => updateStatus(id, "Pending")}>
+                  Mark as Pending
+                </Button>
+              ) : null}
+              {invoice.status === "Pending" ? (
+                <Button onClick={() => updateStatus(id, "Paid")}>
+                  Mark as Paid
+                </Button>
+              ) : null}
+              {invoice.status === "Draft" ? (
+                <Button onClick={() => updateStatus(id, "Pending")}>
+                  Create Invoice
+                </Button>
+              ) : null}
             </div>
           </div>
 
@@ -57,13 +75,13 @@ export function InvoiceDetails() {
               <div>
                 <p className="mb-2">Invoice Date</p>
                 <p className="text-base font-bold text-neutral-8">
-                  {invoice.invoiceDate}
+                  {format(invoice.invoiceDate, "d MMM yyyy")}
                 </p>
               </div>
               <div>
                 <p className="mb-2">Payment Due</p>
                 <p className="text-base font-bold text-neutral-8">
-                  {invoice.dueDate}
+                  {format(invoice.dueDate, "d MMM yyyy")}
                 </p>
               </div>
             </div>
@@ -95,7 +113,7 @@ export function InvoiceDetails() {
                 </thead>
                 <tbody>
                   {invoice.itemList.map((item) => (
-                    <tr>
+                    <tr key={item.name}>
                       <td className="font-bold text-neutral-8">{item.name}</td>
                       <td className="text-center">{item.quantity}</td>
                       <td className="text-right">£{item.price}</td>
@@ -107,7 +125,7 @@ export function InvoiceDetails() {
             </div>
             <div className="col-span-2 row-start-5 flex flex-col gap-6 rounded-tl-lg rounded-tr-lg bg-[#F9FAFE] p-6 text-base sm:hidden">
               {invoice.itemList.map((item) => (
-                <div className="flex justify-between gap-2">
+                <div key={item.name} className="flex justify-between gap-2">
                   <div>
                     <p className="font-bold text-neutral-8">{item.name}</p>
                     <p>

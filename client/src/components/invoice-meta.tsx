@@ -2,12 +2,13 @@ import { cn } from "@/utils/cn";
 import { ArrowRight } from "./icons";
 import { InvoiceMeta } from "@/types";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns/format";
 
-type Props = { invoices: InvoiceMeta[] };
+type Props = { invoice: InvoiceMeta };
 
 type InvoiceStatusProps = {
   className?: string;
-  status: "Paid" | "Pending" | "Draft";
+  status: string;
 };
 
 //TODO: Use CVA for the following component
@@ -47,23 +48,25 @@ export function InvoiceStatus(props: InvoiceStatusProps) {
 }
 
 //TODO: Make the card accessible
-export function InvoiceMeta(props: Props) {
+export function InvoiceMeta({ invoice }: Props) {
   const navigate = useNavigate();
-  const invoice = props.invoices.map((invoice) => (
+  return (
     <div
       key={invoice.id}
       className="hover:shadow-4xl grid cursor-pointer grid-cols-2 grid-rows-4 rounded-md bg-white p-6 shadow-3xl transition-all sm:grid-cols-5 sm:grid-rows-1 sm:items-center sm:justify-items-start sm:gap-x-10"
-      onClick={() => navigate(`invoices/${invoice.id}`)}
+      onClick={() => {
+        navigate(`invoices/${invoice.id}`);
+      }}
     >
       <h3 className="text-md row-start-1 text-neutral-8 sm:col-span-1">
         <span className="text-neutral-7">#</span>
         {invoice.id}
       </h3>
       <p className="row-start-3 text-sm font-medium text-neutral-6 sm:col-start-2 sm:row-start-1">
-        {invoice.dueDate}
+        {format(invoice.dueDate, "d MMM yyyy")}
       </p>
       <p className="row-start-4 sm:col-start-4 sm:row-start-1 sm:justify-self-end">
-        {invoice.amountDue}
+        £{invoice.amountDue}
       </p>
       <p className="col-start-2 row-start-1 justify-self-end text-sm font-medium text-neutral-6 sm:col-start-3 sm:justify-self-start">
         {invoice.clientName}
@@ -74,6 +77,5 @@ export function InvoiceMeta(props: Props) {
       />
       <ArrowRight />
     </div>
-  ));
-  return invoice;
+  );
 }

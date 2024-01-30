@@ -1,21 +1,72 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui";
 import { PlusCircleIcon } from "@/components/icons";
-import { Invoice } from "@/types";
-import { useFieldArray, useForm } from "react-hook-form";
+import { InvoiceFormValues } from "@/types";
+import { useFieldArray, useForm, SubmitHandler } from "react-hook-form";
 import { Form } from ".";
+import { useInvoices } from "@/store/invoices";
+import { add } from "date-fns";
+import { genInvoiceId } from "@/utils/generate-id";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { calculateTotalAmount } from "@/utils/calculate-total-amount";
+
+const schema = z.object({
+  senderStreetAddress: z.string().min(1, { message: "can't be empty" }),
+  senderCity: z.string().min(1, { message: "can't be empty" }),
+  senderPostCode: z.string().min(1, { message: "can't be empty" }),
+  senderCountry: z.string().min(1, { message: "can't be empty" }),
+  clientName: z.string().min(1, { message: "can't be empty" }),
+  clientStreetAddress: z.string().min(1, { message: "can't be empty" }),
+  clientCity: z.string().min(1, { message: "can't be empty" }),
+  clientPostCode: z.string().min(1, { message: "can't be empty" }),
+  clientCountry: z.string().min(1, { message: "can't be empty" }),
+  clientEmail: z.string().min(1, { message: "can't be empty" }),
+  invoiceDate: z.date(),
+  paymentTerms: z.string().min(1, { message: "can't be empty" }),
+  projectDescription: z.string().min(1, { message: "can't be empty" }),
+  itemList: z.array(
+    z.object({
+      name: z.string().min(1, { message: "can't be empty" }),
+      quantity: z.string().min(1, { message: "can't be empty" }),
+      price: z.string().min(1, { message: "can't be empty" }),
+    }),
+  ),
+});
 
 export function NewInvoice() {
-  const { register, control, handleSubmit } = useForm<Invoice>();
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<InvoiceFormValues>({
+    defaultValues: {
+      invoiceDate: new Date(),
+      paymentTerms: "Next 30 days",
+      itemList: [{ name: "", price: "1", quantity: "1" }],
+    },
+    resolver: zodResolver(schema),
+  });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "itemList",
   });
 
+  const createInvoice = useInvoices((state) => state.create);
+
   const actions = (
     <div className="col-span-2 flex justify-between gap-3 bg-white sm:col-span-3">
       <Dialog.Close asChild>
-        <Button variant="ghost" size="sm">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            reset();
+          }}
+        >
           Discard
         </Button>
       </Dialog.Close>
@@ -24,6 +75,8 @@ export function NewInvoice() {
           variant="default"
           className="bg-[#373B53] text-neutral-5 hover:bg-neutral-8"
           size="sm"
+          type="button"
+          onClick={() => handleSubmit((data) => onSubmit(data, true))}
         >
           Save as Draft
         </Button>
@@ -33,6 +86,22 @@ export function NewInvoice() {
       </div>
     </div>
   );
+
+  const onSubmit: SubmitHandler<InvoiceFormValues> = (data, draft) => {
+    const daysToAdd = parseInt(data.paymentTerms.substring(5, 7));
+    const dueDate = add(data.invoiceDate, { days: daysToAdd });
+    const id = genInvoiceId();
+    const { itemList, amountDue } = calculateTotalAmount(data.itemList);
+
+    createInvoice({
+      ...data,
+      dueDate,
+      id,
+      status: draft ? "Draft" : "Pending",
+      amountDue,
+      itemList,
+    });
+  };
 
   return (
     <Dialog.Root>
@@ -54,6 +123,10 @@ export function NewInvoice() {
             register={register}
             handleSubmit={handleSubmit}
             actions={actions}
+            control={control}
+            watch={watch}
+            onSubmit={onSubmit}
+            errors={errors}
           />
         </Dialog.Content>
       </Dialog.Portal>

@@ -5,4 +5,8 @@ import viteTsConfig from "vite-tsconfig-paths";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), viteTsConfig()],
+  // @ts-expect-error here
+  test: {
+    environment: "jsdom",
+  },
 });

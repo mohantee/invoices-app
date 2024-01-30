@@ -1,3 +1,5 @@
+import { sub } from "date-fns";
+
 import { http, HttpResponse } from "msw";
 export const invoiceHandlers = [
   http.get("/invoices", () => {
@@ -5,7 +7,7 @@ export const invoiceHandlers = [
       {
         id: "SM9141",
         clientName: "Alex Grim",
-        dueDate: "20 Sept 2021",
+        dueDate: new Date(),
         status: "Pending",
         amountDue: "£556",
       },
@@ -15,7 +17,7 @@ export const invoiceHandlers = [
   http.get("/invoices/:id", () => {
     return HttpResponse.json({
       id: "SM9141",
-      dueDate: "20 Sep 2021",
+      dueDate: new Date(),
       amountDue: "556.00",
       status: "Pending",
       senderStreetAddress: "19 Union Terrace",
@@ -28,7 +30,7 @@ export const invoiceHandlers = [
       clientPostCode: "BD19PB",
       clientCountry: "United Kingdom",
       clientEmail: "alexgrim@mail.com",
-      invoiceDate: "21 Aug 2021",
+      invoiceDate: sub(new Date(), { days: 30 }),
       paymentTerms: "Next 30 days",
       projectDescription: "Graphic Design",
       itemList: [

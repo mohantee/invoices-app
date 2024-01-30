@@ -1,12 +1,20 @@
-import { useInvoices } from "@/api/get-invoices";
 import { InvoiceMeta } from "./invoice-meta";
+import { useInvoices } from "@/store/invoices";
 
 export function InvoiceList() {
-  const { data: invoices } = useInvoices();
-  const isInvoiceLoading = invoices?.length;
+  const invoices = useInvoices((state) => state.invoices);
+  const filter = useInvoices((state) => state.filter);
+
   return (
     <div className="flex flex-col gap-4">
-      {isInvoiceLoading && <InvoiceMeta invoices={invoices} />}
+      {invoices.map((invoice) => {
+        if (
+          (filter.pending && invoice.status === "Pending") ||
+          (filter.paid && invoice.status === "Paid") ||
+          (filter.draft && invoice.status === "draft")
+        )
+          return <InvoiceMeta key={invoice.id} invoice={invoice} />;
+      })}
     </div>
   );
 }

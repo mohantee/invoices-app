@@ -1,16 +1,13 @@
-export type InvoiceMeta = {
-  id: string;
-  clientName: string;
-  dueDate: string;
-  amountDue: string;
-  status: "Pending";
-};
+export type InvoiceMeta = Pick<
+  InvoiceResponse,
+  "id" | "clientName" | "dueDate" | "amountDue" | "status"
+>;
 
-export type Invoice = {
+export type InvoiceResponse = {
   id: string;
-  dueDate: string;
+  dueDate: Date;
   amountDue: string;
-  status: "Pending" | "Draft" | "Paid";
+  status: string;
   senderStreetAddress: string;
   senderCity: string;
   senderPostCode: string;
@@ -21,13 +18,18 @@ export type Invoice = {
   clientPostCode: string;
   clientCountry: string;
   clientEmail: string;
-  invoiceDate: string;
+  invoiceDate: Date;
   paymentTerms: "Next 1 day" | "Next 7 days" | "Next 14 days" | "Next 30 days";
   projectDescription: string;
   itemList: {
     name: string;
-    quantity: number;
-    price: number;
-    total: number;
+    quantity: string;
+    price: string;
+    total: string;
   }[];
 };
+
+export type InvoiceFormValues = Omit<
+  InvoiceResponse,
+  "id" | "dueDate" | "amountDue" | "status" | "total"
+>;
