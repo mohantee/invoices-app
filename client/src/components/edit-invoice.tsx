@@ -20,7 +20,6 @@ export function EditInvoice() {
     formState: { errors },
     control,
     handleSubmit,
-    reset,
   } = useForm<InvoiceFormValues>({
     defaultValues: oldInvoice,
   });
