@@ -13,9 +13,9 @@ export default function App() {
           <Route path="app" element={<AppLayout />}>
             <Route index element={<InvoicesPage />} />
             <Route path="invoices/:id" element={<InvoiceDetails />} />
-            <Route path="*" element={<Navigate to="/app/invoices" />} />
+            <Route path="*" element={<Navigate to="/app" />} />
           </Route>
-          <Route path="*" element={<Navigate to="/app/invoices" />} />
+          <Route path="*" element={<Navigate to="/app" />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
