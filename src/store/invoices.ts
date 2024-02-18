@@ -3,12 +3,14 @@ import { InvoiceResponse } from "@/types";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 interface InvoiceState {
+  theme: "light" | "dark";
   invoices: InvoiceResponse[];
   filter: {
     pending: boolean;
     paid: boolean;
     draft: boolean;
   };
+  toggleTheme: () => void;
   toggleFilter: (filter: string) => void;
   create: (payload: InvoiceResponse) => void;
   edit: (payload: InvoiceResponse, id: string) => void;
@@ -25,6 +27,11 @@ export const useInvoices = create<InvoiceState>()(
         paid: true,
         draft: true,
       },
+      theme: "light",
+      toggleTheme: () =>
+        set((state) => ({
+          theme: state.theme === "light" ? "dark" : "light",
+        })),
       toggleFilter: (filter) =>
         set((state) => ({
           ...state,

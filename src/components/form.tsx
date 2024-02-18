@@ -269,7 +269,7 @@ export function Form({
                   <PopoverTrigger asChild>
                     <Button
                       variant={"outline"}
-                      className="justify-start rounded border border-neutral-5 px-5 shadow-none"
+                      className="justify-start rounded border border-neutral-5 px-5 shadow-none dark:border-0 dark:bg-neutral-4 dark:text-white"
                       disabled={edit}
                     >
                       {field.value ? (
@@ -279,7 +279,7 @@ export function Form({
                       )}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 shadow-5xl">
+                  <PopoverContent className="w-auto p-0 shadow-5xl dark:border-0 dark:bg-neutral-4 dark:text-white">
                     <Calendar
                       mode="single"
                       hideHead={true}
@@ -315,7 +315,7 @@ export function Form({
                     <SelectItem
                       key={item}
                       value={item}
-                      className="border-b border-neutral-5 px-5 py-4 font-bold transition-all last:border-b-0 hover:text-primary"
+                      className="border-b border-neutral-5 px-5 py-4 font-bold transition-all last:border-b-0 hover:text-primary dark:border-neutral-8"
                     >
                       {item}
                     </SelectItem>

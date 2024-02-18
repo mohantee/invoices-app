@@ -35,7 +35,7 @@ export function NewInvoice() {
   const createInvoice = useInvoices((state) => state.create);
 
   const actions = (
-    <div className="col-span-2 flex justify-between gap-3 bg-white sm:col-span-3">
+    <div className="col-span-2 flex justify-between gap-3 bg-white sm:col-span-3 dark:bg-neutral-12">
       <Dialog.Close asChild>
         <Button
           variant="ghost"
@@ -92,7 +92,7 @@ export function NewInvoice() {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 h-full w-full bg-black/15" />
-        <Dialog.Content className="fixed left-0 top-[72px] h-screen w-full overflow-y-auto bg-white p-6 pb-24 sm:w-[38rem] lg:left-14 lg:top-0 lg:px-14 lg:py-8 lg:pl-[72px]">
+        <Dialog.Content className="fixed left-0 top-[72px] h-screen w-full overflow-y-auto bg-white p-6 pb-24 sm:w-[38rem] lg:left-14 lg:top-0 lg:px-14 lg:py-8 lg:pl-[72px] dark:bg-neutral-12">
           <Form
             fields={fields}
             append={append}

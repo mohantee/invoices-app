@@ -53,22 +53,22 @@ export function InvoiceMeta({ invoice }: Props) {
   return (
     <div
       key={invoice.id}
-      className="grid cursor-pointer grid-cols-2 grid-rows-4 rounded-md bg-white p-6 shadow-3xl transition-all hover:shadow-4xl sm:grid-cols-5 sm:grid-rows-1 sm:items-center sm:justify-items-start sm:gap-x-10"
+      className="grid cursor-pointer grid-cols-2 grid-rows-4 rounded-md bg-white p-6 shadow-3xl transition-all hover:shadow-4xl sm:grid-cols-5 sm:grid-rows-1 sm:items-center sm:justify-items-start sm:gap-x-10 dark:bg-neutral-3 dark:text-white"
       onClick={() => {
         navigate(`invoices/${invoice.id}`);
       }}
     >
-      <h3 className="text-md row-start-1 text-neutral-8 sm:col-span-1">
+      <h3 className="text-md row-start-1 text-neutral-8 sm:col-span-1 dark:text-white">
         <span className="text-neutral-7">#</span>
         {invoice.id}
       </h3>
-      <p className="row-start-3 text-sm font-medium text-neutral-6 sm:col-start-2 sm:row-start-1">
+      <p className="row-start-3 text-sm font-medium text-neutral-6 sm:col-start-2 sm:row-start-1 dark:text-white">
         {format(invoice.dueDate, "d MMM yyyy")}
       </p>
       <p className="row-start-4 sm:col-start-4 sm:row-start-1 sm:justify-self-end">
         £{invoice.amountDue}
       </p>
-      <p className="col-start-2 row-start-1 justify-self-end text-sm font-medium text-neutral-6 sm:col-start-3 sm:justify-self-start">
+      <p className="col-start-2 row-start-1 justify-self-end text-sm font-medium text-neutral-6 sm:col-start-3 sm:justify-self-start dark:text-white">
         {invoice.clientName}
       </p>
       <InvoiceStatus
