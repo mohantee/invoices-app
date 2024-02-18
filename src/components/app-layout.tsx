@@ -1,5 +1,5 @@
 import logo from "@/assets/logo.svg";
-import { DarkModeIcon } from "./icons";
+import { DarkModeIcon, LightModeIcon } from "./icons";
 import avatar from "../assets/avatar.png";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
@@ -29,10 +29,17 @@ export function Navigation() {
         alt="logo"
         className="absolute left-0 top-0 max-h-[4.5rem]"
       />
-      <DarkModeIcon
-        className="ml-auto cursor-pointer text-red-600 lg:ml-0 lg:mt-auto"
-        onClick={() => toggleTheme()}
-      />
+      {theme === "dark" ? (
+        <LightModeIcon
+          className="ml-auto cursor-pointer text-red-600 lg:ml-0 lg:mt-auto"
+          onClick={() => toggleTheme()}
+        />
+      ) : (
+        <DarkModeIcon
+          className="ml-auto cursor-pointer text-red-600 lg:ml-0 lg:mt-auto"
+          onClick={() => toggleTheme()}
+        />
+      )}
       <div className="border-l-2 border-solid border-[#494E6E] p-6 lg:border-l-0 lg:border-t-2 lg:p-4">
         <img src={avatar} className="w-10 rounded-full" />
       </div>
