@@ -45,6 +45,8 @@ export const useInvoices = create<InvoiceState>()(
         }),
       edit: (payload, id) =>
         set((state) => {
+          console.log("payload", payload);
+          console.log("state", state);
           const newInvoices = [...state.invoices];
           const indexOfInvoice = newInvoices.findIndex(
             (invoice) => invoice.id === id,

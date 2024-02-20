@@ -7,7 +7,6 @@ import { useInvoices } from "@/store/invoices";
 
 function applyThemePreference(theme: string) {
   const root = window.document.documentElement;
-  console.log(root);
   const isDark = theme === "dark";
   root.classList.remove(isDark ? "light" : "dark");
   root.classList.add(theme);
@@ -16,7 +15,6 @@ function applyThemePreference(theme: string) {
 export function Navigation() {
   const toggleTheme = useInvoices((state) => state.toggleTheme);
   const theme = useInvoices((state) => state.theme);
-  console.log(theme);
 
   useEffect(() => {
     applyThemePreference(theme);

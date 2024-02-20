@@ -8,6 +8,8 @@ import { useInvoices } from "@/store/invoices";
 import { useInvoiceId } from "@/hooks/use-invoice-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { invoiceSchema } from "@/schema/invoice-schema";
+import { useState } from "react";
+import { calculateTotalAmount } from "@/utils/calculate-total-amount";
 
 type Params = { id: string };
 
@@ -31,19 +33,22 @@ export function EditInvoice() {
     name: "itemList",
   });
 
-  console.log(errors);
+  const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<InvoiceFormValues> = (data) => {
+    const { itemList, amountDue } = calculateTotalAmount(data.itemList);
     const newInvoice = {
       ...data,
       id: oldInvoice?.id,
       dueDate: oldInvoice?.dueDate,
-      amountDue: oldInvoice?.amountDue,
       status: oldInvoice?.status,
       invoiceDate: oldInvoice?.invoiceDate,
+      itemList,
+      amountDue,
     };
     // @ts-expect-error here
     edit(newInvoice, id);
+    setOpen(false);
   };
 
   const actions = (
@@ -60,7 +65,7 @@ export function EditInvoice() {
   );
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         <Button variant="ghost" className="text-neutral-7">
           Edit

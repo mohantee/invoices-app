@@ -10,6 +10,7 @@ import { genInvoiceId } from "@/utils/generate-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateTotalAmount } from "@/utils/calculate-total-amount";
 import { invoiceSchema } from "@/schema/invoice-schema";
+import { useState } from "react";
 
 export function NewInvoice() {
   const {
@@ -32,18 +33,14 @@ export function NewInvoice() {
     name: "itemList",
   });
 
+  const [open, setOpen] = useState(false);
+
   const createInvoice = useInvoices((state) => state.create);
 
   const actions = (
     <div className="col-span-2 flex justify-between gap-3 bg-white sm:col-span-3 dark:bg-neutral-12">
       <Dialog.Close asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => {
-            reset();
-          }}
-        >
+        <Button variant="ghost" size="sm" onClick={() => reset()}>
           Discard
         </Button>
       </Dialog.Close>
@@ -78,10 +75,12 @@ export function NewInvoice() {
       amountDue,
       itemList,
     });
+    reset();
+    setOpen(false);
   };
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         <Button className="flex gap-2 py-6 pl-2 pr-4 hover:bg-primary/90 sm:gap-4">
           <PlusCircleIcon />
