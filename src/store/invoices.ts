@@ -80,7 +80,7 @@ export const useInvoices = create<InvoiceState>()(
     }),
     {
       name: "invoice-storage",
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
     },
   ),
 );
